@@ -1,0 +1,6 @@
+go 1.21.1
+
+use (
+	.
+	/home/gregory/src/options
+)

@@ -11,7 +11,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/gregoryv/options"
+	"options"
 )
 
 var DefaultOutput io.Writer = os.Stdout
