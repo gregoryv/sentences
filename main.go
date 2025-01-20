@@ -11,22 +11,19 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"options"
 )
 
 var DefaultOutput io.Writer = os.Stdout
 
 func main() {
-	f := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
-	o := options.New(f)
 
 	var useIndex bool
-	o.BoolVar(&useIndex, "index", false)
-	o.BoolVar(&useIndex, "i", false)
+	flag.BoolVar(&useIndex, "index", false, "")
+	flag.BoolVar(&useIndex, "i", false, "")
 
-	f.Parse(os.Args[1:])
+	flag.Parse()
 
-	files := f.Args()
+	files := flag.Args()
 	log.SetFlags(0)
 
 	// ----------------------------------------
