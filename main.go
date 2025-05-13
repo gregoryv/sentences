@@ -10,7 +10,6 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
-
 )
 
 var DefaultOutput io.Writer = os.Stdout
