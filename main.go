@@ -42,6 +42,10 @@ func main() {
 		for scanner.Scan() {
 			i++
 			line := scanner.Text()
+			if i := strings.Index(line, "\n\n"); i > -1 {
+				// found an empty line, this is normal after headings
+				line = line[i+2:]
+			}
 			line = strings.ReplaceAll(line, "\n", " ")
 			line = strings.TrimSpace(line)
 			if len(line) > 1 { // one character followed by ., ? or !

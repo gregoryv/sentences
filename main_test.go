@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/gregoryv/golden"
 )
 
 func Test_main(t *testing.T) {
@@ -15,7 +17,7 @@ func Test_main(t *testing.T) {
 	dir := t.TempDir()
 	filename := filepath.Join(dir, "text")
 	err := os.WriteFile(filename, []byte(`
-# some header
+# Some header
 
 This is a sentence. This is another
 sentence. And another one.
@@ -43,4 +45,5 @@ No, but you are!
 		}
 		t.Fail()
 	}
+	golden.AssertWith(t, result, "testdata/found.txt")
 }
