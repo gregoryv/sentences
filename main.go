@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -12,54 +11,32 @@ import (
 	"unicode/utf8"
 )
 
-var DefaultOutput io.Writer = os.Stdout
-
 func main() {
-
-	var useIndex bool
-	flag.BoolVar(&useIndex, "index", false, "")
-	flag.BoolVar(&useIndex, "i", false, "")
-
-	flag.Parse()
-
-	files := flag.Args()
 	log.SetFlags(0)
+	sentences(os.Stdout, os.Stdin)
+}
 
-	// ----------------------------------------
+func sentences(w io.Writer, r io.Reader) {
+	scanner := bufio.NewScanner(r)
+	// Set the split function for the scanning operation.
+	scanner.Split(ScanSentences)
 
-	for _, filename := range files {
-
-		fh, err := os.Open(filename)
-		if err != nil {
-			log.Fatal(err)
+	var i int
+	for scanner.Scan() {
+		i++
+		line := scanner.Text()
+		if i := strings.LastIndex(line, "\n\n"); i > -1 {
+			// found an empty line, this is normal after headings
+			line = line[i+2:]
 		}
-
-		scanner := bufio.NewScanner(fh)
-		// Set the split function for the scanning operation.
-		scanner.Split(ScanSentences)
-		w := DefaultOutput
-		var i int
-		for scanner.Scan() {
-			i++
-			line := scanner.Text()
-			if i := strings.LastIndex(line, "\n\n"); i > -1 {
-				// found an empty line, this is normal after headings
-				line = line[i+2:]
-			}
-			line = strings.ReplaceAll(line, "\n", " ")
-			line = strings.TrimSpace(line)
-			if len(line) > 1 { // one character followed by ., ? or !
-				if useIndex {
-					fmt.Fprintln(w, i, line)
-				} else {
-					fmt.Fprintln(w, line)
-				}
-			}
+		line = strings.ReplaceAll(line, "\n", " ")
+		line = strings.TrimSpace(line)
+		if len(line) > 1 { // one character followed by ., ? or !
+			fmt.Fprintln(w, line)
 		}
-		if err := scanner.Err(); err != nil {
-			log.Fatal(err)
-		}
-		fh.Close()
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
 	}
 }
 

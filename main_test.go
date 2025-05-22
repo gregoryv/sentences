@@ -2,21 +2,16 @@ package main
 
 import (
 	"bytes"
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/gregoryv/golden"
 )
 
-func Test_main(t *testing.T) {
+func Test_sentences(t *testing.T) {
 	var buf bytes.Buffer
-	DefaultOutput = &buf
 
-	dir := t.TempDir()
-	filename := filepath.Join(dir, "text")
-	err := os.WriteFile(filename, []byte(`
+	r := strings.NewReader(`
 # Some header
 
 This is a sentence. This is another
@@ -35,13 +30,9 @@ As seen in this example
 
 Sentence starting after a newline.
 
-`), 0644)
-	if err != nil {
-		t.Fatal(err)
-	}
+`)
 
-	os.Args = []string{"test", "-i", filename}
-	main()
+	sentences(&buf, r)
 
 	result := strings.TrimSpace(buf.String())
 	golden.AssertWith(t, result, "testdata/found.txt")

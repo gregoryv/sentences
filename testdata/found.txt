@@ -1,6 +1,6 @@
-1 This is a sentence.
-2 This is another sentence.
-3 And another one.
-4 What do you mean?
-5 No, but you are!
-6 Sentence starting after a newline.
+This is a sentence.
+This is another sentence.
+And another one.
+What do you mean?
+No, but you are!
+Sentence starting after a newline.
