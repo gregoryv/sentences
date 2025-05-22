@@ -3,3 +3,4 @@
 3 And another one.
 4 What do you mean?
 5 No, but you are!
+6 Sentence starting after a newline.

@@ -29,6 +29,12 @@ What do you mean?
 you are wrong!
 No, but you are!
 
+As seen in this example
+
+   1 2 3
+
+Sentence starting after a newline.
+
 `), 0644)
 	if err != nil {
 		t.Fatal(err)
@@ -38,12 +44,5 @@ No, but you are!
 	main()
 
 	result := strings.TrimSpace(buf.String())
-	got := strings.Split(result, "\n")
-	if len(got) != 5 {
-		for _, s := range got {
-			t.Logf("%q", s)
-		}
-		t.Fail()
-	}
 	golden.AssertWith(t, result, "testdata/found.txt")
 }

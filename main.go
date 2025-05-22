@@ -42,7 +42,7 @@ func main() {
 		for scanner.Scan() {
 			i++
 			line := scanner.Text()
-			if i := strings.Index(line, "\n\n"); i > -1 {
+			if i := strings.LastIndex(line, "\n\n"); i > -1 {
 				// found an empty line, this is normal after headings
 				line = line[i+2:]
 			}
