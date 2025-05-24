@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"io/ioutil"
 	"os"
@@ -10,7 +11,7 @@ import (
 	"github.com/gregoryv/golden"
 )
 
-func Test_sentences(t *testing.T) {
+func Test(t *testing.T) {
 	var buf bytes.Buffer
 
 	r := strings.NewReader(`
@@ -42,11 +43,23 @@ Sentence starting after a newline.
 
 func Benchmark(b *testing.B) {
 	data, _ := os.ReadFile("testdata/rfc2616.txt")
-
 	r := bytes.NewReader(data)
-	for b.Loop() {
-		sentences(ioutil.Discard, r)
-		r.Reset(data)
 
-	}
+	b.Run("baseline", func(b *testing.B) {
+		for b.Loop() {
+			s := bufio.NewScanner(r)
+			for s.Scan() {
+				_ = s.Bytes()
+			}
+			r.Reset(data)
+		}
+	})
+
+	b.Run("", func(b *testing.B) {
+		for b.Loop() {
+			sentences(ioutil.Discard, r)
+			r.Reset(data)
+		}
+	})
+
 }

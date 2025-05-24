@@ -2,11 +2,10 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"bytes"
 	"io"
 	"log"
 	"os"
-	"strings"
 	"unicode"
 	"unicode/utf8"
 )
@@ -22,23 +21,32 @@ func sentences(w io.Writer, r io.Reader) {
 	scanner.Split(ScanSentences)
 
 	var i int
+
 	for scanner.Scan() {
 		i++
-		line := scanner.Text()
-		if i := strings.LastIndex(line, "\n\n"); i > -1 {
+		line := scanner.Bytes()
+		if i := bytes.LastIndex(line, doubleNL); i > -1 {
 			// found an empty line, this is normal after headings
 			line = line[i+2:]
 		}
-		line = strings.ReplaceAll(line, "\n", " ")
-		line = strings.TrimSpace(line)
+		line = bytes.ReplaceAll(line, oneNL, oneSpace)
+		line = bytes.TrimSpace(line)
 		if len(line) > 1 { // one character followed by ., ? or !
-			fmt.Fprintln(w, line)
+			w.Write(line)
+			w.Write(oneNL)
 		}
 	}
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
 }
+
+var (
+	nl       = byte('\n')
+	oneNL    = []byte{nl}
+	oneSpace = []byte{' '}
+	doubleNL = []byte{nl, nl}
+)
 
 // ScanSentence is a split function for a Scanner that returns
 // sentence.
