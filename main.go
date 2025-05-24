@@ -40,20 +40,22 @@ func sentences(w io.Writer, r io.Reader) {
 	}
 }
 
-// ScanSentence is a split function for a Scanner that returns sentence.
+// ScanSentence is a split function for a Scanner that returns
+// sentence.
 func ScanSentences(data []byte, atEOF bool) (advance int, token []byte, err error) {
 	// Skip until first capital letter is found
 	start := 0
-
 	for width := 0; start < len(data); start += width {
 		var r rune
 		r, width = utf8.DecodeRune(data[start:])
 		if unicode.IsUpper(r) {
 			break
 		}
-	}
-	// Scan until ., marking end of word.
-	for width, i := 0, start; i < len(data); i += width {
+	} // capital letter found
+
+	// find what looks like end of sentence.
+	var width int
+	for i := start; i < len(data); i += width {
 		var r rune
 		r, width = utf8.DecodeRune(data[i:])
 		switch r {
