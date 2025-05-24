@@ -2,6 +2,8 @@ package main
 
 import (
 	"bytes"
+	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 
@@ -36,4 +38,15 @@ Sentence starting after a newline.
 
 	result := strings.TrimSpace(buf.String())
 	golden.AssertWith(t, result, "testdata/found.txt")
+}
+
+func Benchmark(b *testing.B) {
+	data, _ := os.ReadFile("testdata/rfc2616.txt")
+
+	r := bytes.NewReader(data)
+	for b.Loop() {
+		sentences(ioutil.Discard, r)
+		r.Reset(data)
+
+	}
 }
