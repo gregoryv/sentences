@@ -43,9 +43,9 @@ Sentence starting after a newline.
 
 func Benchmark(b *testing.B) {
 	data, _ := os.ReadFile("testdata/rfc2616.txt")
-	r := bytes.NewReader(data)
 
 	b.Run("baseline", func(b *testing.B) {
+		r := bytes.NewReader(data)
 		for b.Loop() {
 			s := bufio.NewScanner(r)
 			for s.Scan() {
@@ -56,6 +56,7 @@ func Benchmark(b *testing.B) {
 	})
 
 	b.Run("", func(b *testing.B) {
+		r := bytes.NewReader(data)
 		for b.Loop() {
 			sentences(ioutil.Discard, r)
 			r.Reset(data)

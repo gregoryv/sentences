@@ -27,9 +27,17 @@ func sentences(w io.Writer, r io.Reader) {
 		line := scanner.Bytes()
 		if i := bytes.LastIndex(line, doubleNL); i > -1 {
 			// found an empty line, this is normal after headings
+			// ignore heading
 			line = line[i+2:]
 		}
-		line = bytes.ReplaceAll(line, oneNL, oneSpace)
+		// for some reason
+		// line = bytes.ReplaceAll(line, oneNL, oneSpace)
+		// results in many allocations during benchmarks
+		for j, _ := range line {
+			if line[j] == nl {
+				line[j] = ' '
+			}
+		}
 		line = bytes.TrimSpace(line)
 		if len(line) > 1 { // one character followed by ., ? or !
 			w.Write(line)
