@@ -44,7 +44,22 @@ Sentence starting after a newline.
 func Benchmark(b *testing.B) {
 	data, _ := os.ReadFile("testdata/rfc2616.txt")
 
-	b.Run("baseline", func(b *testing.B) {
+	b.Run("reader", func(b *testing.B) {
+		r := bytes.NewReader(data)
+		p := make([]byte, 1024)
+		for b.Loop() {
+		inner:
+			for {
+				_, err := r.Read(p)
+				if err != nil {
+					break inner
+				}
+			}
+			r.Reset(data)
+		}
+	})
+
+	b.Run("scanner", func(b *testing.B) {
 		r := bytes.NewReader(data)
 		for b.Loop() {
 			s := bufio.NewScanner(r)
