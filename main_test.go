@@ -12,7 +12,7 @@ import (
 )
 
 func Test(t *testing.T) {
-	r := strings.NewReader(`
+	data := []byte(`
 # Some header
 
 This is a sentence. This is another
@@ -35,10 +35,20 @@ Sentence starting after a newline.
 
 	t.Run("", func(t *testing.T) {
 		var buf bytes.Buffer
+		r := bytes.NewReader(data)
 		sentences(&buf, r)
 
 		result := strings.TrimSpace(buf.String())
 		golden.AssertWith(t, result, "testdata/found.txt")
+	})
+
+	t.Run("", func(t *testing.T) {
+		var buf bytes.Buffer
+		r := bytes.NewReader(data)
+		sentences2(&buf, r)
+
+		result := strings.TrimSpace(buf.String())
+		golden.AssertWith(t, result, "testdata/found2.txt")
 	})
 }
 
@@ -75,6 +85,14 @@ func Benchmark(b *testing.B) {
 		r := bytes.NewReader(data)
 		for b.Loop() {
 			sentences(ioutil.Discard, r)
+			r.Reset(data)
+		}
+	})
+
+	b.Run("", func(b *testing.B) {
+		r := bytes.NewReader(data)
+		for b.Loop() {
+			sentences2(ioutil.Discard, r)
 			r.Reset(data)
 		}
 	})

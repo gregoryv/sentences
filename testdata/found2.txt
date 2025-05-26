@@ -1,0 +1,6 @@
+This is a sentence.
+This is another sentence.
+And another one.
+What do you mean?
+No, but you are!
+Sentence starting after a newline.
