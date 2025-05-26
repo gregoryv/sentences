@@ -12,8 +12,6 @@ import (
 )
 
 func Test(t *testing.T) {
-	var buf bytes.Buffer
-
 	r := strings.NewReader(`
 # Some header
 
@@ -35,10 +33,13 @@ Sentence starting after a newline.
 
 `)
 
-	sentences(&buf, r)
+	t.Run("", func(t *testing.T) {
+		var buf bytes.Buffer
+		sentences(&buf, r)
 
-	result := strings.TrimSpace(buf.String())
-	golden.AssertWith(t, result, "testdata/found.txt")
+		result := strings.TrimSpace(buf.String())
+		golden.AssertWith(t, result, "testdata/found.txt")
+	})
 }
 
 func Benchmark(b *testing.B) {
