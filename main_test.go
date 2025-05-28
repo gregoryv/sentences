@@ -31,6 +31,9 @@ As seen in this example
 
 Sentence starting after a newline.
 
+Requirement links SHOULD(#R7) be written within parenthesis and start with
+'#R' followed by a number.
+
 `)
 
 	t.Run("", func(t *testing.T) {
