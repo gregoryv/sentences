@@ -10,7 +10,6 @@ import (
 type Command struct {
 	In  io.Reader
 	Out io.Writer
-	Err io.Writer
 }
 
 func (c *Command) Run() {
