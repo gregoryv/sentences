@@ -1,6 +1,6 @@
 module github.com/gregoryv/sentences
 
-go 1.21rc2
+go 1.24.3
 
 require github.com/gregoryv/golden v0.8.1
 

@@ -1,4 +1,4 @@
-package main
+package sentences
 
 import (
 	"bufio"
@@ -20,8 +20,10 @@ func (c *Command) Run() {
 	}
 }
 
-var buf = &bytes.Buffer{}
-var p = make([]byte, 1)
+var (
+	buf = &bytes.Buffer{}
+	p   = make([]byte, 1)
+)
 
 func capitalLetter(w io.Writer, r *bufio.Reader) parseFn {
 	for {
