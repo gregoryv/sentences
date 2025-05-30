@@ -41,7 +41,14 @@ Requirement links SHOULD(#R7) be written within parenthesis and start with
    lines.
 
 Using parenthesis (e.g.
-HTTP 1.1).
+HTTP 1.1. ).
+
+Using square [HTTP
+1.1. ].
+
+Using curly { HTTP
+1.1. } .
+
 
 Incomplete sentence
 `)
@@ -59,6 +66,7 @@ Incomplete sentence
 	cases := []string{
 		"One sentence.",
 		"no sentences",
+		"Incomplete (HTTP 1.1",
 	}
 	for _, v := range cases {
 		t.Run(v, func(t *testing.T) {

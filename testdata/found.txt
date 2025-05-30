@@ -7,4 +7,6 @@ Software v1.1 is great!
 Sentence starting after a newline.
 Requirement links SHOULD(#R7) be written within parenthesis and start with '#R' followed by a number.
 This one is indented and spread over many lines.
-Using parenthesis (e.g. HTTP 1.1).
+Using parenthesis (e.g. HTTP 1.1. ).
+Using square [HTTP 1.1. ].
+Using curly { HTTP 1.1. } .

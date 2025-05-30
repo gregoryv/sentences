@@ -51,6 +51,14 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 			buf.WriteByte(b)
 			return endOf(')')
 
+		case '[':
+			buf.WriteByte(b)
+			return endOf(']')
+
+		case '{':
+			buf.WriteByte(b)
+			return endOf('}')
+
 		case '.':
 			buf.WriteByte(b)
 			return spaceAfterDot
