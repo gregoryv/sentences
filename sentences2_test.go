@@ -1,12 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"io"
 	"unicode"
 )
 
-func sentences2(w io.Writer, r io.Reader) {
+func sentences2(w io.Writer, r *bufio.Reader) {
 	next := capitalLetter
 	for next != nil {
 		next = next(w, r)
@@ -16,65 +17,66 @@ func sentences2(w io.Writer, r io.Reader) {
 var buf = &bytes.Buffer{}
 var p = make([]byte, 1)
 
-func capitalLetter(w io.Writer, r io.Reader) parseFn {
+func capitalLetter(w io.Writer, r *bufio.Reader) parseFn {
 	for {
-		_, err := r.Read(p)
+		r, _, err := r.ReadRune()
 		if err != nil {
 			return nil
 		}
 
-		if unicode.IsUpper(rune(p[0])) {
-			buf.Write(p)
+		if unicode.IsUpper(r) {
+			buf.WriteRune(r)
 			return end
 		}
 	}
 	return nil
 }
 
-func end(w io.Writer, r io.Reader) parseFn {
+func end(w io.Writer, r *bufio.Reader) parseFn {
 	var lastNewline bool
 	for {
-		_, err := r.Read(p)
+		b, err := r.ReadByte()
 		if err != nil {
 			return nil
 		}
 
-		switch p[0] {
+		switch b {
 		case '.':
-			buf.Write(p)
-			return space
+			buf.WriteByte(b)
+			return spaceAfterDot
 
 		case '?', '!':
-			buf.Write(p)
+			buf.WriteByte(b)
 			buf.WriteString("\n")
 			io.Copy(w, buf)
 			return capitalLetter
 
 		case '\n':
 			if lastNewline {
+				// no end delimiter but two new lines would mean
 				buf.Truncate(0)
 			} else {
 				lastNewline = true
-				buf.WriteString(" ")
+				buf.WriteByte(' ')
 			}
 
 		default:
-			buf.Write(p)
+			buf.WriteByte(b)
 		}
 	}
 	return nil
 }
 
-func space(w io.Writer, r io.Reader) parseFn {
+func spaceAfterDot(w io.Writer, r *bufio.Reader) parseFn {
 	for {
-		_, err := r.Read(p)
+		b, err := r.ReadByte()
 		if err != nil {
 			return nil
 		}
 
-		switch p[0] {
+		switch b {
 		case ' ', '\n', '\t':
-			buf.WriteString("\n")
+			buf.WriteByte('\n')
 			io.Copy(w, buf)
 			return capitalLetter
 
@@ -84,4 +86,4 @@ func space(w io.Writer, r io.Reader) parseFn {
 	}
 }
 
-type parseFn func(w io.Writer, r io.Reader) parseFn
+type parseFn func(w io.Writer, r *bufio.Reader) parseFn

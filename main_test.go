@@ -51,7 +51,7 @@ Requirement links SHOULD(#R7) be written within parenthesis and start with
 
 	t.Run("", func(t *testing.T) {
 		var buf bytes.Buffer
-		r := bytes.NewReader(data)
+		r := bufio.NewReader(bytes.NewReader(data))
 		sentences2(&buf, r)
 
 		result := strings.TrimSpace(buf.String())
@@ -97,10 +97,12 @@ func Benchmark(b *testing.B) {
 	})
 
 	b.Run("", func(b *testing.B) {
-		r := bytes.NewReader(data)
+		rdata := bytes.NewReader(data)
+		r := bufio.NewReader(rdata)
 		for b.Loop() {
 			sentences2(ioutil.Discard, r)
-			r.Reset(data)
+			rdata.Reset(data)
+			r.Reset(rdata)
 		}
 	})
 
