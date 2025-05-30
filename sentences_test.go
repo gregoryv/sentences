@@ -37,20 +37,18 @@ Requirement links SHOULD(#R7) be written within parenthesis and start with
 '#R' followed by a number.
 
 
-
+Incomplete sentence
 `)
 
-	t.Run("", func(t *testing.T) {
-		var buf bytes.Buffer
-		cmd := Command{
-			Out: &buf,
-			In:  bufio.NewReader(bytes.NewReader(data)),
-		}
-		cmd.Run()
+	var buf bytes.Buffer
+	cmd := Command{
+		Out: &buf,
+		In:  bufio.NewReader(bytes.NewReader(data)),
+	}
+	cmd.Run()
 
-		result := strings.TrimSpace(buf.String())
-		golden.AssertWith(t, result, "testdata/found.txt")
-	})
+	result := strings.TrimSpace(buf.String())
+	golden.AssertWith(t, result, "testdata/found.txt")
 }
 
 func Benchmark(b *testing.B) {

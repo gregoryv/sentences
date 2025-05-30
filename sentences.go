@@ -70,7 +70,6 @@ func end(w io.Writer, r *bufio.Reader) parseFn {
 			buf.WriteByte(b)
 		}
 	}
-	return nil
 }
 
 func spaceAfterDot(w io.Writer, r *bufio.Reader) parseFn {
