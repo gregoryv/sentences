@@ -52,6 +52,20 @@ Incomplete sentence
 
 	result := strings.TrimSpace(buf.String())
 	golden.AssertWith(t, result, "testdata/found.txt")
+
+	cases := []string{
+		"One sentence.",
+		"no sentences",
+	}
+	for _, v := range cases {
+		t.Run(v, func(t *testing.T) {
+			cmd := Command{
+				Out: ioutil.Discard,
+				In:  bufio.NewReader(strings.NewReader(v)),
+			}
+			cmd.Run()
+		})
+	}
 }
 
 func Benchmark(b *testing.B) {

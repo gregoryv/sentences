@@ -37,7 +37,6 @@ func capitalLetter(w io.Writer, r *bufio.Reader) parseFn {
 			return endOfSentence
 		}
 	}
-	return nil
 }
 
 func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
