@@ -32,13 +32,13 @@ func capitalLetter(w io.Writer, r *bufio.Reader) parseFn {
 
 		if unicode.IsUpper(r) {
 			buf.WriteRune(r)
-			return end
+			return endOfSentence
 		}
 	}
 	return nil
 }
 
-func end(w io.Writer, r *bufio.Reader) parseFn {
+func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 	var lastNewline bool
 	for {
 		b, err := r.ReadByte()
@@ -59,7 +59,10 @@ func end(w io.Writer, r *bufio.Reader) parseFn {
 
 		case '\n':
 			if lastNewline {
-				// no end delimiter but two new lines would mean
+				// no delimiter but two new lines would mean the
+				// sentence is wrongly formatted or e.g. there is
+				// and indented example or something like that.
+				// we skip it nontheless
 				buf.Truncate(0)
 			} else {
 				lastNewline = true
@@ -87,7 +90,7 @@ func spaceAfterDot(w io.Writer, r *bufio.Reader) parseFn {
 
 		default:
 			buf.WriteByte(b)
-			return end
+			return endOfSentence
 		}
 	}
 }
