@@ -7,7 +7,7 @@ import (
 	"unicode"
 )
 
-func sentences2(w io.Writer, r *bufio.Reader) {
+func sentences(w io.Writer, r *bufio.Reader) {
 	next := capitalLetter
 	for next != nil {
 		next = next(w, r)
@@ -81,6 +81,7 @@ func spaceAfterDot(w io.Writer, r *bufio.Reader) parseFn {
 			return capitalLetter
 
 		default:
+			buf.WriteByte(b)
 			return end
 		}
 	}

@@ -42,20 +42,11 @@ Requirement links SHOULD(#R7) be written within parenthesis and start with
 
 	t.Run("", func(t *testing.T) {
 		var buf bytes.Buffer
-		r := bytes.NewReader(data)
+		r := bufio.NewReader(bytes.NewReader(data))
 		sentences(&buf, r)
 
 		result := strings.TrimSpace(buf.String())
 		golden.AssertWith(t, result, "testdata/found.txt")
-	})
-
-	t.Run("", func(t *testing.T) {
-		var buf bytes.Buffer
-		r := bufio.NewReader(bytes.NewReader(data))
-		sentences2(&buf, r)
-
-		result := strings.TrimSpace(buf.String())
-		golden.AssertWith(t, result, "testdata/found2.txt")
 	})
 }
 
@@ -77,30 +68,11 @@ func Benchmark(b *testing.B) {
 		}
 	})
 
-	b.Run("scanner", func(b *testing.B) {
-		r := bytes.NewReader(data)
-		for b.Loop() {
-			s := bufio.NewScanner(r)
-			for s.Scan() {
-				_ = s.Bytes()
-			}
-			r.Reset(data)
-		}
-	})
-
-	b.Run("", func(b *testing.B) {
-		r := bytes.NewReader(data)
-		for b.Loop() {
-			sentences(ioutil.Discard, r)
-			r.Reset(data)
-		}
-	})
-
 	b.Run("", func(b *testing.B) {
 		rdata := bytes.NewReader(data)
 		r := bufio.NewReader(rdata)
 		for b.Loop() {
-			sentences2(ioutil.Discard, r)
+			sentences(ioutil.Discard, r)
 			rdata.Reset(data)
 			r.Reset(rdata)
 		}
