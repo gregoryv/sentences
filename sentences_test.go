@@ -36,6 +36,9 @@ Sentence starting after a newline.
 Requirement links SHOULD(#R7) be written within parenthesis and start with
 '#R' followed by a number.
 
+   This one is indented
+   and spread over many
+   lines.
 
 Incomplete sentence
 `)

@@ -60,6 +60,7 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 			return capitalLetter
 
 		case '\n':
+			scanEmpty(r)
 			if lastNewline {
 				// no delimiter but two new lines would mean the
 				// sentence is wrongly formatted or e.g. there is
@@ -72,8 +73,23 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 			}
 
 		default:
+			lastNewline = false
 			buf.WriteByte(b)
 		}
+	}
+}
+
+func scanEmpty(r *bufio.Reader) {
+	for {
+		b, err := r.ReadByte()
+		if b == ' ' {
+			continue
+		}
+		if err != nil {
+			return
+		}
+		r.UnreadByte()
+		return
 	}
 }
 
