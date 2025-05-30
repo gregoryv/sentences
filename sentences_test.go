@@ -55,34 +55,15 @@ Requirement links SHOULD(#R7) be written within parenthesis and start with
 
 func Benchmark(b *testing.B) {
 	data, _ := os.ReadFile("testdata/rfc2616.txt")
-
-	b.Run("reader", func(b *testing.B) {
-		r := bytes.NewReader(data)
-		p := make([]byte, 1024)
-		for b.Loop() {
-		inner:
-			for {
-				_, err := r.Read(p)
-				if err != nil {
-					break inner
-				}
-			}
-			r.Reset(data)
-		}
-	})
-
-	b.Run("", func(b *testing.B) {
-		rdata := bytes.NewReader(data)
-		r := bufio.NewReader(rdata)
-		cmd := Command{
-			In:  r,
-			Out: ioutil.Discard,
-		}
-		for b.Loop() {
-			cmd.Run()
-			rdata.Reset(data)
-			r.Reset(rdata)
-		}
-	})
-
+	rdata := bytes.NewReader(data)
+	r := bufio.NewReader(rdata)
+	cmd := Command{
+		In:  r,
+		Out: ioutil.Discard,
+	}
+	for b.Loop() {
+		cmd.Run()
+		rdata.Reset(data)
+		r.Reset(rdata)
+	}
 }
