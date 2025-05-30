@@ -47,6 +47,10 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 		}
 
 		switch b {
+		case '(':
+			buf.WriteByte(b)
+			return endOf(')')
+
 		case '.':
 			buf.WriteByte(b)
 			return spaceAfterDot
@@ -73,6 +77,28 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 		default:
 			lastNewline = false
 			buf.WriteByte(b)
+		}
+	}
+}
+
+func endOf(endChar byte) parseFn {
+	return func(w io.Writer, r *bufio.Reader) parseFn {
+		for {
+			b, err := r.ReadByte()
+			if err != nil {
+				return nil
+			}
+			switch b {
+			case endChar:
+				buf.WriteByte(b)
+				return endOfSentence
+
+			case '\n':
+				buf.WriteByte(' ')
+				scanEmpty(r)
+			default:
+				buf.WriteByte(b)
+			}
 		}
 	}
 }

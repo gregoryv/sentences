@@ -40,6 +40,9 @@ Requirement links SHOULD(#R7) be written within parenthesis and start with
    and spread over many
    lines.
 
+Using parenthesis (e.g.
+HTTP 1.1).
+
 Incomplete sentence
 `)
 
