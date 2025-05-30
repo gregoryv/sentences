@@ -52,8 +52,8 @@ func sentences(w io.Writer, r io.Reader) {
 var (
 	nl       = byte('\n')
 	oneNL    = []byte{nl}
-	oneSpace = []byte{' '}
 	doubleNL = []byte{nl, nl}
+	oneSpace = []byte{' '}
 )
 
 // ScanSentence is a split function for a Scanner that returns
@@ -76,6 +76,7 @@ func ScanSentences(data []byte, atEOF bool) (advance int, token []byte, err erro
 		r, width = utf8.DecodeRune(data[i:])
 		switch r {
 		case '.', '?', '!':
+			// wip what if its "Software v1.1 is..."
 			return i + width, data[start : i+width], nil
 			break
 		}
