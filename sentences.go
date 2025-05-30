@@ -67,7 +67,7 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 		case '?', '!':
 			buf.WriteByte(b)
 			buf.WriteString("\n")
-			io.Copy(w, buf)
+			writeSentence(w, buf)
 			return capitalLetter
 
 		case '\n':
@@ -88,12 +88,6 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 			buf.WriteByte(b)
 		}
 	}
-}
-
-var opposite = map[byte]byte{
-	'(': ')',
-	'[': ']',
-	'{': '}',
 }
 
 func endOf(endChar byte, next parseFn) parseFn {
@@ -142,7 +136,7 @@ func spaceAfterDot(w io.Writer, r *bufio.Reader) parseFn {
 		switch b {
 		case ' ', '\n', '\t':
 			buf.WriteByte('\n')
-			io.Copy(w, buf)
+			writeSentence(w, buf)
 			return capitalLetter
 
 		default:
@@ -150,6 +144,25 @@ func spaceAfterDot(w io.Writer, r *bufio.Reader) parseFn {
 			return endOfSentence
 		}
 	}
+}
+
+func writeSentence(w io.Writer, buf *bytes.Buffer) {
+	line := buf.Bytes()
+	defer buf.Reset()
+	if buf.Len() <= 5 { // there are no sentences this short
+		return
+	}
+
+	if !bytes.Contains(line[:len(line)-1], []byte{' '}) {
+		return
+	}
+	io.Copy(w, buf)
+}
+
+var opposite = map[byte]byte{
+	'(': ')',
+	'[': ']',
+	'{': '}',
 }
 
 type parseFn func(w io.Writer, r *bufio.Reader) parseFn

@@ -53,7 +53,7 @@ Using curly { HTTP
    (e.g. DNS failures). (Section 10.5.5).
 
 Över landskap.
-
+I am.
 Incomplete sentence
 `)
 
@@ -71,6 +71,8 @@ Incomplete sentence
 		"One sentence.",
 		"no sentences",
 		"Incomplete (HTTP 1.1",
+		"I.\n",
+		"I_am.\n",
 	}
 	for _, v := range cases {
 		t.Run(v, func(t *testing.T) {
