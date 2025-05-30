@@ -32,6 +32,7 @@ func capitalLetter(w io.Writer, r *bufio.Reader) parseFn {
 		}
 
 		if unicode.IsUpper(r) {
+			buf.Truncate(0)
 			buf.WriteRune(r)
 			return endOfSentence
 		}
