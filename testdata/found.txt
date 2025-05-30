@@ -3,5 +3,6 @@ This is another sentence.
 And another one.
 What do you mean?
 No, but you are!
+Software v1.1 is great!
 Sentence starting after a newline.
 Requirement links SHOULD(#R7) be written within parenthesis and start with '#R' followed by a number.

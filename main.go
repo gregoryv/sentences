@@ -71,14 +71,25 @@ func ScanSentences(data []byte, atEOF bool) (advance int, token []byte, err erro
 
 	// find what looks like end of sentence.
 	var width int
+	var dotFound bool
 	for i := start; i < len(data); i += width {
 		var r rune
 		r, width = utf8.DecodeRune(data[i:])
 		switch r {
-		case '.', '?', '!':
-			// wip what if its "Software v1.1 is..."
+		case ' ', '\n', '\t': // dot followed by space
+			if dotFound {
+				return i + width, data[start : i+width], nil
+			}
+
+		case '.':
+			dotFound = true
+
+		case '?', '!':
 			return i + width, data[start : i+width], nil
 			break
+
+		default:
+			dotFound = false
 		}
 	}
 	// Request more data.
