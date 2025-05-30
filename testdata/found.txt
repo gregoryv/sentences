@@ -10,3 +10,4 @@ This one is indented and spread over many lines.
 Using parenthesis (e.g. HTTP 1.1. ).
 Using square [HTTP 1.1. ].
 Using curly { HTTP 1.1. } .
+Clarified which error code should be used for inbound server failures (e.g. DNS failures).

@@ -26,7 +26,7 @@ var (
 
 func capitalLetter(w io.Writer, r *bufio.Reader) parseFn {
 	for {
-		r, _, err := r.ReadRune()
+		r, width, err := r.ReadRune()
 		if err != nil {
 			return nil
 		}
@@ -34,6 +34,14 @@ func capitalLetter(w io.Writer, r *bufio.Reader) parseFn {
 		if unicode.IsUpper(r) {
 			buf.WriteRune(r)
 			return endOfSentence
+		}
+
+		if width == 1 {
+			b := string(r)[0]
+			switch b {
+			case '(', '[', '{':
+				return endOf(opposite[b], capitalLetter)
+			}
 		}
 	}
 }
@@ -47,17 +55,9 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 		}
 
 		switch b {
-		case '(':
+		case '(', '[', '{':
 			buf.WriteByte(b)
-			return endOf(')')
-
-		case '[':
-			buf.WriteByte(b)
-			return endOf(']')
-
-		case '{':
-			buf.WriteByte(b)
-			return endOf('}')
+			return endOf(opposite[b], endOfSentence)
 
 		case '.':
 			buf.WriteByte(b)
@@ -89,7 +89,13 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 	}
 }
 
-func endOf(endChar byte) parseFn {
+var opposite = map[byte]byte{
+	'(': ')',
+	'[': ']',
+	'{': '}',
+}
+
+func endOf(endChar byte, next parseFn) parseFn {
 	return func(w io.Writer, r *bufio.Reader) parseFn {
 		for {
 			b, err := r.ReadByte()
@@ -99,7 +105,7 @@ func endOf(endChar byte) parseFn {
 			switch b {
 			case endChar:
 				buf.WriteByte(b)
-				return endOfSentence
+				return next
 
 			case '\n':
 				buf.WriteByte(' ')

@@ -49,6 +49,8 @@ Using square [HTTP
 Using curly { HTTP
 1.1. } .
 
+   Clarified which error code should be used for inbound server failures
+   (e.g. DNS failures). (Section 10.5.5).
 
 Incomplete sentence
 `)
