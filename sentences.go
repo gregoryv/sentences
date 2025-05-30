@@ -7,10 +7,16 @@ import (
 	"unicode"
 )
 
-func sentences(w io.Writer, r *bufio.Reader) {
+type Command struct {
+	In  io.Reader
+	Out io.Writer
+	Err io.Writer
+}
+
+func (c *Command) Run() {
 	next := capitalLetter
 	for next != nil {
-		next = next(w, r)
+		next = next(c.Out, bufio.NewReader(c.In))
 	}
 }
 

@@ -8,5 +8,10 @@ import (
 
 func main() {
 	log.SetFlags(0)
-	sentences(os.Stdout, bufio.NewReader(os.Stdin))
+	c := Command{
+		In:  bufio.NewReader(os.Stdin),
+		Out: os.Stdout,
+		Err: os.Stderr,
+	}
+	c.Run()
 }
