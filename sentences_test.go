@@ -54,6 +54,13 @@ Using curly { HTTP
 
 Över landskap.
 I am.
+
+      Notes:
+
+      1) Additional CRLFs may precede the first boundary string in the
+         entity.
+
+
 Incomplete sentence
 `)
 

@@ -77,7 +77,7 @@ func endOfSentence(w io.Writer, r *bufio.Reader) parseFn {
 				// sentence is wrongly formatted or e.g. there is
 				// and indented example or something like that.
 				// we skip it nontheless
-				buf.Truncate(0)
+				return capitalLetter
 			} else {
 				lastNewline = true
 				buf.WriteByte(' ')

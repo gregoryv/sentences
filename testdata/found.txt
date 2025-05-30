@@ -13,3 +13,4 @@ Using curly { HTTP 1.1. } .
 Clarified which error code should be used for inbound server failures (e.g. DNS failures).
 Över landskap.
 I am.
+Additional CRLFs may precede the first boundary string in the entity.
