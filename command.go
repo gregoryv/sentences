@@ -8,21 +8,18 @@ import (
 )
 
 type Command struct {
-	In  io.Reader
+	In  *bufio.Reader
 	Out io.Writer
 }
 
 func (c *Command) Run() {
 	next := capitalLetter
 	for next != nil {
-		next = next(c.Out, bufio.NewReader(c.In))
+		next = next(c.Out, c.In)
 	}
 }
 
-var (
-	buf = &bytes.Buffer{}
-	p   = make([]byte, 1)
-)
+var buf = &bytes.Buffer{}
 
 func capitalLetter(w io.Writer, r *bufio.Reader) parseFn {
 	for {

@@ -3,6 +3,10 @@
 This project adheres to semantic versioning and all major changes will
 be noted in this file.
 
+## [0.2.1] 
+
+- Command takes bufio.Reader
+
 ## [0.2.0] 2025-05-31
 
 - Document, benchmark and optimize
