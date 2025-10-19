@@ -12,7 +12,7 @@ import (
 )
 
 func Test(t *testing.T) {
-	data := []byte(`
+	data := `
 # Some header
 
 This is a sentence. This is another
@@ -62,14 +62,10 @@ I am.
 
 
 Incomplete sentence
-`)
+`
 
 	var buf bytes.Buffer
-	cmd := Command{
-		Out: &buf,
-		In:  bufio.NewReader(bytes.NewReader(data)),
-	}
-	cmd.Run()
+	ParseString(&buf, data)
 
 	result := strings.TrimSpace(buf.String())
 	golden.AssertWith(t, result, "testdata/found.txt")
@@ -83,11 +79,7 @@ Incomplete sentence
 	}
 	for _, v := range cases {
 		t.Run(v, func(t *testing.T) {
-			cmd := Command{
-				Out: io.Discard,
-				In:  bufio.NewReader(strings.NewReader(v)),
-			}
-			cmd.Run()
+			ParseString(io.Discard, v)
 		})
 	}
 }

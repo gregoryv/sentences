@@ -4,8 +4,21 @@ import (
 	"bufio"
 	"bytes"
 	"io"
+	"strings"
 	"unicode"
 )
+
+func ParseString(out io.Writer, v string) {
+	Parse(out, strings.NewReader(v))
+}
+
+func Parse(out io.Writer, in io.Reader) {
+	cmd := Command{
+		In:  bufio.NewReader(in),
+		Out: out,
+	}
+	cmd.Run()
+}
 
 type Command struct {
 	In  *bufio.Reader
