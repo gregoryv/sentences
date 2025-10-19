@@ -3,7 +3,7 @@ package sentences
 import (
 	"bufio"
 	"bytes"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 	"testing"
@@ -84,7 +84,7 @@ Incomplete sentence
 	for _, v := range cases {
 		t.Run(v, func(t *testing.T) {
 			cmd := Command{
-				Out: ioutil.Discard,
+				Out: io.Discard,
 				In:  bufio.NewReader(strings.NewReader(v)),
 			}
 			cmd.Run()
@@ -98,7 +98,7 @@ func Benchmark(b *testing.B) {
 	r := bufio.NewReader(rdata)
 	cmd := Command{
 		In:  r,
-		Out: ioutil.Discard,
+		Out: io.Discard,
 	}
 	for b.Loop() {
 		cmd.Run()
